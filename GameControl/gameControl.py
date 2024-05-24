@@ -156,6 +156,17 @@ class GameControl:
             bob.spawn(tile)
         # self.pushToList()
 
+    def initiateOtherBobs(self, nbBobs): #in the future, will be used for initiating the bobs of other players
+        from Tiles.Bob.bob import Bob
+        for _ in range(nbBobs):
+            print("Adding other bob")
+            x = random.randint(0, self.setting.getGridLength() - 1)
+            y = random.randint(0, self.setting.getGridLength() - 1)
+            tile = self.getMap()[x][y]
+            bob = Bob()
+            bob.isMine = False
+            bob.spawn(tile)
+
     def eatingTest(self):
         from Tiles.Bob.bob import Bob
         x1 = random.randint(0, self.setting.getGridLength() - 1)

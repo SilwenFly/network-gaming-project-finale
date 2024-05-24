@@ -18,6 +18,8 @@ class Bob:
         self.alreadyInteracted = False
         self.CurrentTile : 'Tile' = None
 
+        self.isMine = True
+
         self.energy: 'float' = self.setting.getBobSpawnEnergy()
         self.energyMax = self.setting.getBobMaxEnergy()
 

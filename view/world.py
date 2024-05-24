@@ -106,6 +106,8 @@ class World:
                                 pg.draw.rect(surface, (255, 0, 0), (finish[0], finish[1] - 5, bar_width, 5))
                                 if bob.isHunting:
                                     surface.blit(purpleLeft, finish)
+                                elif bob.isMine:
+                                    surface.blit(blueLeft, finish)
                                 else: surface.blit(greenLeft, finish)
                             else: pass
                         else:
@@ -122,6 +124,8 @@ class World:
                                         pg.draw.rect(surface, (255, 0, 0), (pos[0], pos[1] - 5, bar_width, 5))
                                         if bob.isHunting:
                                             surface.blit(purpleLeft, pos)
+                                        elif bob.isMine:
+                                            surface.blit(blueLeft, pos)
                                         else: surface.blit(greenLeft, pos)
                                     else: pass
                                 else: pass
@@ -135,6 +139,8 @@ class World:
                             pg.draw.rect(surface, (255, 0, 0), (finish[0], finish[1] - 5, bar_width, 5))
                             if bob.isHunting:
                                 surface.blit(purpleLeft, finish)
+                            elif bob.isMine:
+                                surface.blit(blueLeft, finish)
                             else: surface.blit(greenLeft, finish)
                         else: pass
 
@@ -249,6 +255,8 @@ class World:
             # pg.draw.rect(surface, (255, 0, 0), (finish[0], finish[1] - 5, bar_width, 5))
             if bob.isHunting:
                 surface.blit(purpleLeft, (a*self.zoom, b*self.zoom))
+            elif bob.isMine: 
+                surface.blit(blueLeft, (a*self.zoom, b*self.zoom))
             else: surface.blit(greenLeft, (a*self.zoom, b*self.zoom))
 
 
