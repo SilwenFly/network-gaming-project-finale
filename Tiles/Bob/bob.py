@@ -228,7 +228,7 @@ class Bob:
     def detectPotentialPartners(self, listBobs: list['Bob']) -> list['Bob']:
         potentialPartners: list['Bob'] = []
         for bob in listBobs:
-            if (self.canMate(bob) and bob != self):
+            if (self.canMate(bob) and bob != self and bob.ipOwner == self.ipOwner): #Add : on verifie que c'est un copain
                 potentialPartners.append(bob)
         return potentialPartners
     
