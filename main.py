@@ -24,7 +24,7 @@ def main():
     
     # implement game 
 
-    print(etat.running);
+    print(etat.running)
     while etat.running:
         
         # # start menu goes here

@@ -17,6 +17,9 @@ from GameControl.saveAndLoad import *
 from view.graph import *
 # from GameControl.inputManager import *
 
+from network.Network import *
+from network.Packet import *
+
 class Game:
     instance = None
     def __init__(self, screen, clock):
@@ -43,6 +46,9 @@ class Game:
         self.gameController.initiateBobs(self.setting.getNbBob())
         # self.gameController.eatingTest()
         self.gameController.respawnFood()
+
+        #Partie ajoutée pour le réseau
+        self.network = Network()
     
     def loadGame(self, saveNumber):
         loadSetting(saveNumber)
@@ -55,6 +61,9 @@ class Game:
         # self.gameController.initiateBobs(self.setting.getNbBob())
         loadBob(saveNumber)
         loadFood(saveNumber) 
+
+        #Partie ajoutée pour le réseau
+        self.network = Network()
 
     def saveGameByInput(self, event):
         if event.key == pg.K_1:
@@ -83,6 +92,19 @@ class Game:
             self.update()
             # self.draw()
             if self.setting.simuMode:
+
+                #Ajout pour le réseau
+                packet = Packet("Update",self.network.id,"BROADCAST",self.gameController.getNetworkData())
+                print("Packet: ", packet.content)
+                b1 = Bob()
+                packet.data_add(b1)
+                print("Packet: ", packet.content)
+                packet.serialize()
+                self.network.send(packet)
+                print("Packet Envoyé")
+                self.network.receive()
+                ######################
+
                 self.gameController.increaseTick()
                 self.drawSimu() 
             else:

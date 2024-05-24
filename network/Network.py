@@ -9,6 +9,9 @@ import os
 import errno
 import subprocess
 
+from Tiles.Bob import Bob
+from Tiles.tiles import Tile
+
 class Network:
     def __init__(self,LOCAL = '127.0.0.1',PORT = 9000,BUFSIZE = 1024):
 
@@ -18,6 +21,8 @@ class Network:
         self.BUFSIZE = BUFSIZE
         self.LOCAL = LOCAL
         self.PORT = PORT
+
+        self.buff_receive = [] #Buffer de réception
 
         self.BLACK   = "\033[30m" #Couleurs d'affichage
         self.RED     = "\033[31m"
@@ -46,6 +51,7 @@ class Network:
     def receive(self):    
         try :
             msgIn = self.connection.recv(self.BUFSIZE)
+            self.buff_receive.append(msgIn)
             print(self.GREEN, "->> Recv : ", msgIn.decode(), self.NOCOLOR)
             if msgIn.decode() == 'exit':
                 print(self.BOLD, self.RED, "### Exit ###", self.NOCOLOR)
@@ -60,7 +66,12 @@ class Network:
                 return
             else : #Other error -> problem ! (I've never had any issue, yet)
                 print(self.BOLD, self.RED, "\n ERROR in the receive fct", self.NOCOLOR)
+                self.buff_receive.append("ERROR")
                 self.exit()
+    
+    #On efface le buffer de réception
+    def receive_clear(self):
+        self.buff_receive = []
 
     def exit(self):
         """
@@ -121,14 +132,14 @@ class Network:
         '''
         Répond à une demande d'accès à la propriété d'un objet
         '''
-        if thing.isinstance(Bob) or thing.isinstance(Cell) or thing.isinstance(Edible):
+        if thing.isinstance(Bob) or thing.isinstance(Tile):
             packet = Packet("AnswerNetworkProperty")
             packet.data_add(thing.network_property)
             packet.serialize()
             self.send(packet)
     
     def verify_owner_property(self,thing,player):
-        if thing.isinstance(Bob) or thing.isinstance(Cell) or thing.isinstance(Edible):
+        if thing.isinstance(Bob) or thing.isinstance(Tile):
             if thing.owner_property == player:
                 return True
             else:
