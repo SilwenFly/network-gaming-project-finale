@@ -4,15 +4,24 @@ from GameControl.setting import Setting
 from Tiles.directions import directionsDict, directionsList
 from view.texture import *
 import random
+from socket import gethostname, gethostbyname #Add
 from math import floor
 
 class Bob: 
     id = 0
     def __init__(self):
         self.setting = Setting.getSettings()
-
-        self.id = Bob.id
+        
+        self.id = Bob.id #les bobs ont déjà une id
         Bob.id += 1
+        
+        ##J'ai pas compris ça
+        #Propriété réseau
+        self.network_property = ""
+        #Propriété métier
+        ##
+        
+        self.ipOwner = gethostbyname(gethostname()) #Add : on identifie le proprietaire grace à son adresse IP
         self.age = 0
         self.isHunting = False
         self.alreadyInteracted = False
@@ -156,7 +165,10 @@ class Bob:
 
 ################### Interact with other bobs ###########################
     def canEat(self, bob: 'Bob') -> bool:
-        return bob.mass * 3 / 2 < self.mass
+        if(self.ipOwner == bob.ipOwner): #Add : on teste si c'est un copain ou pas
+            return False
+        else:
+            return bob.mass * 3 / 2 < self.mass
     
     def eat(self, bob: 'Bob'):
         bob.PreviousTile = bob.CurrentTile

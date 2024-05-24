@@ -85,6 +85,8 @@ class Game:
             self.update()
             # self.draw()
             if self.setting.simuMode:
+                #################################################################
+                #C'EST ICI QU'ON VA ENVOYER ET RECEVOIR LES DATAS AVEC LES AUTRES
                 self.gameController.increaseTick()
                 self.drawSimu() 
             else:
