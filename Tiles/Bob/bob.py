@@ -163,7 +163,10 @@ class Bob:
 
 ################### Interact with other bobs ###########################
     def canEat(self, bob: 'Bob') -> bool:
-        return bob.mass * 3 / 2 < self.mass
+        if(self.ipOwner == bob.ipOwner): #Add : on teste si c'est un copain ou pas
+            return False
+        else:
+            return bob.mass * 3 / 2 < self.mass
     
     def eat(self, bob: 'Bob'):
         bob.PreviousTile = bob.CurrentTile
