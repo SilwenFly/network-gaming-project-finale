@@ -19,3 +19,5 @@ La verification que le bob nous appartient bien pour lui faire faire une action 
 (dans la boucle de jeu, au moment de faire faire une action à un bob) et pas dans chaques fonction des bobs  
 Modification faite : on ne peut faire faire une action qu'a ses bob, les bobs ne mangent pas les copains et ne font des bébé que entre bob du même propriétaire  
 
+## Florine 
+J'ai créé une fonction `initiateOtherBobs ` dans le fichier GameControl.py. Cette fonction servira à afficher les Bobs de l'autre joueur en modifiant l'attribut : `self.isMine`. Cela permet donc de changer la couleur des Bobs : *bleu* quand ils nous appartiennent, *vert* sinon. 
