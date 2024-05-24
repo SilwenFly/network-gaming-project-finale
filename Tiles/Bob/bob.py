@@ -8,11 +8,12 @@ from math import floor
 
 class Bob: 
     id = 0
-    def __init__(self):
+    def __init__(self,idOwner):
         self.setting = Setting.getSettings()
-
-        self.id = Bob.id
+        
+        self.id = Bob.id #les bobs ont déjà une id
         Bob.id += 1
+        self.idOwner #id proprietaire pour savoir à qui le bob
         self.age = 0
         self.isHunting = False
         self.alreadyInteracted = False
