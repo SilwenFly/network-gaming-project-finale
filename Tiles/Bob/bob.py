@@ -5,11 +5,17 @@ from Tiles.directions import directionsDict, directionsList
 from view.texture import *
 import random
 from math import floor
+from socket import gethostname, gethostbyname
 
 class Bob: 
     id = 0
     def __init__(self):
         self.setting = Setting.getSettings()
+
+        #Propriété réseau
+        self.network_property = ""
+        #Propriété métier
+        self.owner_property = gethostbyname(gethostname())
 
         self.id = Bob.id
         Bob.id += 1
