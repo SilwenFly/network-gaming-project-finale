@@ -4,12 +4,12 @@ from GameControl.setting import Setting
 from Tiles.directions import directionsDict, directionsList
 from view.texture import *
 import random
-from socket import gethostname, gethostbyname
+from socket import gethostname, gethostbyname #Add
 from math import floor
 
 class Bob: 
     id = 0
-    def __init__(self,idOwner):
+    def __init__(self):
         self.setting = Setting.getSettings()
         
         self.id = Bob.id #les bobs ont déjà une id
@@ -21,7 +21,7 @@ class Bob:
         #Propriété métier
         ##
         
-        self.ipOwner = gethostbyname(gethostname()) #on identifie le proprietaire grace à son adresse IP
+        self.ipOwner = gethostbyname(gethostname()) #Add : on identifie le proprietaire grace à son adresse IP
         self.age = 0
         self.isHunting = False
         self.alreadyInteracted = False
