@@ -12,6 +12,16 @@ Célestine : Notion de propriété
 Titouan : python - C & C - python  
 Delong : C - C  
 
+# Consignes
+Chaque joueur à une copie locale du jeu pour visualiser la simulation et placer ses bobs/sa nourriture  
+Les modifications locale des joueurs sont envoyées aux autre joueur pour qu'il mettent a jour leur copie locale  
+Il est acceptable qu'un joueur voit les mouvements d'un autre avec un peu de retard  
+Un joueur a acces aux caractéristiques des entitées des autres joueurs
+Les entitées (bobs et nourriture) ont une propriété metier, les objets du jeu (case, bobs et nourriture) ont une propriété réseau
+-Propriété métier : a qui ça appartient
+-Propriete réseau : qui y a acces temporairement
+Concurence sur les objets : plusieur bob ont acces aux mêmes nourriture mais attention ils ne peuvent pas manger deux fois la même nourriture
+
 # Notes :
 ## Célestine
 Je met "Add" en commentaire à coté des lignes de code que je modifie pour pouvoir les retrouver facilement en Ctrl F  
