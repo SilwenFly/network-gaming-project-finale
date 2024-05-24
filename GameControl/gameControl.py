@@ -252,7 +252,11 @@ class GameControl:
             bob.clearPreviousTiles()
         for bob in self.listBobs:
             if bob not in self.diedQueue:
-                bob.action()
+                ###########################################################################
+                #Add : Vérification que le bob qui va être bougé appartient bien au joueur
+                #Si on parcours tous les bobs et pas juste les notres, il faudrait mettre ce test avant not in sel.died Queue pour optimiser
+                if bob.ipOwner == gethostbyname(gethostname()):
+                    bob.action()
         # for bob in self.listBobs:
         #     if bob not in self.diedQueue:
                 
