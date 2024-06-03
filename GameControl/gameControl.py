@@ -157,6 +157,7 @@ class GameControl:
             bob.spawn(tile)
         # self.pushToList()
 
+    #########################################  Fonction ajoutées par florine et celestine 
     def initiateOtherBobs(self, listOtherBobs): #in the future, will be used for initiating the bobs of other players
         from Tiles.Bob.bob import Bob
         for otherBob in listOtherBobs:
@@ -166,6 +167,12 @@ class GameControl:
             tile = self.getMap()[x][y]
             otherBob.isMine = False
             otherBob.spawn(tile)
+            
+    def clearOtherBobs(self, listOtherBobs):
+        from Tiles.Bob.bob import Bob
+        for bob in listOtherBobs:
+            bob.CurrentTile.removeBob(self)
+    #########################################################################################"
 
     def eatingTest(self):
         from Tiles.Bob.bob import Bob
