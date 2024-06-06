@@ -10,7 +10,6 @@ if TYPE_CHECKING:
     from Tiles.tiles import Tile
 from socket import gethostname, gethostbyname
 
-
 class GameControl:
     instance = None
     #initialisation of grids:
@@ -21,6 +20,7 @@ class GameControl:
         self.nbBobs: 'int'= 0
         self.nbBobsSpawned = 0
         self.listBobs : list['Bob'] = []
+        self.listOtheBobs : list['Bob'] = [] #Add
         self.listFoods: set['Tile'] = set()
         self.newBornQueue : list['Bob'] = []
         self.diedQueue: list['Bob'] = []
@@ -90,6 +90,7 @@ class GameControl:
         self.nbBobs: 'int'= 0
         self.nbBobsSpawned = 0
         self.listBobs : list['Bob'] = []
+        self.listOtherBobs : list['Bob'] = [] #Add
         self.listFoods: set['Tile'] = set()
         self.newBornQueue : list['Bob'] = []
         self.diedQueue: list['Bob'] = []
@@ -162,8 +163,8 @@ class GameControl:
         from Tiles.Bob.bob import Bob
         for otherBob in listOtherBobs:
             print("Adding other bob")
-            x = otherBob.currentTile.x
-            y = otherBob.currentTile.y
+            x = otherBob.CurrentTile.gridX
+            y = otherBob.CurrentTile.gridY
             tile = self.getMap()[x][y]
             otherBob.isMine = False
             otherBob.spawn(tile)
@@ -265,12 +266,24 @@ class GameControl:
         self.nbBorn = 0
         self.pushToList()
         self.wipeBobs()
+        ####################################  RECUPERER ICI LA LISTE DES BOBS TRANSMISE PAR LES AUTRES #####
+
+        #dans le but de tester : Add
+        from Tiles.Bob.bob import Bob
+        from Tiles.tiles import Tile
+
+        #bob1 = Bob()
+        #bob1.CurrentTile = Tile(3,3)
+        #self.listOtherBobs.append(bob1)
+        ##############
+
+        self.initiateOtherBobs(self.listOtherBobs) #Add, paramètres a choisir
         self.listBobs.sort(key=lambda x: x.speed, reverse=True)
         for bob in self.listBobs:
             bob.clearPreviousTiles()
         for bob in self.listBobs:
             if bob not in self.diedQueue:
-                ###########################################################################
+                ########################################################################### 
                 #Add : Vérification que le bob qui va être bougé appartient bien au joueur
                 #Si on parcours tous les bobs et pas juste les notres, il faudrait mettre ce test avant not in sel.died Queue pour optimiser
                 if bob.ipOwner == gethostbyname(gethostname()):
