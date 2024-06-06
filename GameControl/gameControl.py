@@ -8,7 +8,8 @@ if TYPE_CHECKING:
     from Tiles.Bob.bob import Bob
     # from Tiles.Food import Food
     from Tiles.tiles import Tile
-from socket import gethostname, gethostbyname
+from socket import gethostname, gethostbyname #Add
+from random import randint #Add
 
 class GameControl:
     instance = None
@@ -158,7 +159,7 @@ class GameControl:
             bob.spawn(tile)
         # self.pushToList()
 
-    #########################################  Fonction ajoutées par florine et celestine 
+    #########################################  Fonction ajoutées par florine et celestine Add
     def initiateOtherBobs(self, listOtherBobs): #in the future, will be used for initiating the bobs of other players
         from Tiles.Bob.bob import Bob
         for otherBob in listOtherBobs:
@@ -167,12 +168,15 @@ class GameControl:
             y = otherBob.CurrentTile.gridY
             tile = self.getMap()[x][y]
             otherBob.isMine = False
-            otherBob.spawn(tile)
+            otherBob.spawnOtherBob(tile)
             
     def clearOtherBobs(self, listOtherBobs):
         from Tiles.Bob.bob import Bob
         for bob in listOtherBobs:
-            bob.CurrentTile.removeBob(self)
+            ###to do : il faudra surement ajouter un sécurité pour ne pas qu'on ai un probleme si on tombe sur un bob qui c'est fait mangé
+            bob.CurrentTile.removeBob(bob)
+            indexBob = self.listOtherBobs.index(bob)
+            del self.listOtherBobs[indexBob] #On enleve le bob de listOtherBobs, attention je crois que Phuc lui laisse les bobs morts dans la liste mais juste les ajoute au mort ou jsp, a verifier
     #########################################################################################"
 
     def eatingTest(self):
@@ -266,18 +270,25 @@ class GameControl:
         self.nbBorn = 0
         self.pushToList()
         self.wipeBobs()
+
+        #Avant de mettre a jour la liste des bob des autres 
+        #On nettoie pour pas avoir plusieurs fois les others bobs
+        if(self.listOtherBobs):
+            self.clearOtherBobs(self.listOtherBobs)
         ####################################  RECUPERER ICI LA LISTE DES BOBS TRANSMISE PAR LES AUTRES #####
 
         #dans le but de tester : Add
         from Tiles.Bob.bob import Bob
         from Tiles.tiles import Tile
 
-        #bob1 = Bob()
-        #bob1.CurrentTile = Tile(3,3)
-        #self.listOtherBobs.append(bob1)
+        bob1 = Bob()
+        bob1.id = 99999999
+        bob1.CurrentTile = Tile(randint(1,10),3)
+        #bob1.CurrentTile.addBob(bob1)
+        self.listOtherBobs.append(bob1)
         ##############
 
-        self.initiateOtherBobs(self.listOtherBobs) #Add, paramètres a choisir
+        self.initiateOtherBobs(self.listOtherBobs) #Add, met les bobs dans les cases
         self.listBobs.sort(key=lambda x: x.speed, reverse=True)
         for bob in self.listBobs:
             bob.clearPreviousTiles()
@@ -287,6 +298,7 @@ class GameControl:
                 #Add : Vérification que le bob qui va être bougé appartient bien au joueur
                 #Si on parcours tous les bobs et pas juste les notres, il faudrait mettre ce test avant not in sel.died Queue pour optimiser
                 if bob.ipOwner == gethostbyname(gethostname()):
+                    #print(bob.id) #Add debuggage
                     bob.action()
         # for bob in self.listBobs:
         #     if bob not in self.diedQueue:
