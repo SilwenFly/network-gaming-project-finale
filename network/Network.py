@@ -1,4 +1,4 @@
-import Packet
+from network.Packet import *
 
 import pickle
 
@@ -9,7 +9,7 @@ import os
 import errno
 import subprocess
 
-from Tiles.Bob import Bob
+from Tiles.Bob import bob
 from Tiles.tiles import Tile
 
 class Network:
@@ -40,9 +40,27 @@ class Network:
         print(self.BOLD, self.RED, "PROJET PROGRAMMATION RESEAU - STI - INSA CVL 2023/2024", self.NOCOLOR)
         print("\n")
         print(self.BOLD, self.RED, "Serveur Allumé, sur le port", PORT, self.NOCOLOR)
+        print(os.getcwd())
         #lancer le processus C sur le port xxxx.
-        os.system(r'./tcpclient 9000 &')
-        #accepter la connection du processus C
+        program_win = os.path.join(os.path.dirname(__file__), "tcpclient_win.exe")
+        program_unix = os.path.join(os.path.dirname(__file__), "tcpclient_unix")
+
+        # Define the arguments for the executable
+        arguments = ["9000"]
+
+        # Create the command as a list
+        
+
+        # Use subprocess.Popen to run the command
+        if os.name == 'nt':
+            command = [program_win] + arguments
+            
+        elif os.name == 'posix':
+            command = [program_unix] + arguments
+        else:
+            print('This is not a Windows or Unix-like system.')
+            exit()
+        process = subprocess.Popen(command, shell=True)
         self.connection, retaddr = self.mysocket.accept()
         self.connection.setblocking(False)
         print(self.BOLD, self.RED,"Connecté au programme C local", self.NOCOLOR)
@@ -132,14 +150,14 @@ class Network:
         '''
         Répond à une demande d'accès à la propriété d'un objet
         '''
-        if thing.isinstance(Bob) or thing.isinstance(Tile):
+        if thing.isinstance(bob) or thing.isinstance(Tile):
             packet = Packet("AnswerNetworkProperty")
             packet.data_add(thing.network_property)
             packet.serialize()
             self.send(packet)
     
     def verify_owner_property(self,thing,player):
-        if thing.isinstance(Bob) or thing.isinstance(Tile):
+        if thing.isinstance(bob) or thing.isinstance(Tile):
             if thing.owner_property == player:
                 return True
             else:
