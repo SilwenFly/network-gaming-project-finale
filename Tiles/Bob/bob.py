@@ -4,6 +4,7 @@ from GameControl.setting import Setting
 from Tiles.directions import directionsDict, directionsList
 from view.texture import *
 import random
+from socket import gethostname, gethostbyname #Add
 from math import floor
 from socket import gethostname, gethostbyname
 
@@ -19,10 +20,20 @@ class Bob:
 
         self.id = Bob.id
         Bob.id += 1
+       
+        ##J'ai pas compris ça
+        #Propriété réseau
+        self.network_property = ""
+        #Propriété métier
+        ##
+        
+        self.ipOwner = gethostbyname(gethostname()) #Add : on identifie le proprietaire grace à son adresse IP
         self.age = 0
         self.isHunting = False
         self.alreadyInteracted = False
         self.CurrentTile : 'Tile' = None
+
+        self.isMine = True
 
         self.energy: 'float' = self.setting.getBobSpawnEnergy()
         self.energyMax = self.setting.getBobMaxEnergy()
@@ -56,6 +67,12 @@ class Bob:
         self.PreviousTiles.append(self.CurrentTile)
         self.CurrentTile.addBob(self)
         GameControl.getInstance().addToNewBornQueue(self) 
+#new fonction added Add
+    def spawnOtherBob(self, tile: 'Tile'):
+        self.CurrentTile = tile
+        self.PreviousTile = self.CurrentTile
+        self.PreviousTiles.append(self.CurrentTile)
+        self.CurrentTile.addBob(self)
 
     def die(self):
         self.CurrentTile.removeBob(self)
@@ -160,7 +177,11 @@ class Bob:
 
 ################### Interact with other bobs ###########################
     def canEat(self, bob: 'Bob') -> bool:
-        return bob.mass * 3 / 2 < self.mass
+        if(self.ipOwner == bob.ipOwner): #Add : on teste si c'est un copain ou pas
+        #remarque, on aurait aussi pu faire if bob in ListOtherBobs ou qqch comme ça    
+            return False
+        else:
+            return bob.mass * 3 / 2 < self.mass
     
     def eat(self, bob: 'Bob'):
         bob.PreviousTile = bob.CurrentTile
@@ -220,7 +241,7 @@ class Bob:
     def detectPotentialPartners(self, listBobs: list['Bob']) -> list['Bob']:
         potentialPartners: list['Bob'] = []
         for bob in listBobs:
-            if (self.canMate(bob) and bob != self):
+            if (self.canMate(bob) and bob != self and bob.ipOwner == self.ipOwner): #Add : on verifie que c'est un copain
                 potentialPartners.append(bob)
         return potentialPartners
     

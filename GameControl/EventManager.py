@@ -545,6 +545,8 @@ def pause( screen, camera ):
             if -64 <= (a + camera.scroll.x) <= 1920 and -64 <= (b + camera.scroll.y)  <= 1080:
                 if bob.isHunting:
                     pauseSurface.blit(purpleLeft, finish)
+                elif bob.isMine: 
+                    pauseSurface.blit(blueLeft, finish)
                 else: pauseSurface.blit(greenLeft, finish)
         ########################## Draw Food #######################################################
         foodTexture = loadFoodImage()
@@ -1719,6 +1721,8 @@ def drawModifiable(surface, camera):
                             pg.draw.rect(surface, (255, 0, 0), (finish[0], finish[1] - 5, bar_width, 5))
                             if bob.isHunting:
                                 surface.blit(purpleLeft, finish)
+                            elif bob.isMine: 
+                                surface.blit(blueLeft, finish)
                             else: surface.blit(greenLeft, finish)
                         else: pass
                     else:
@@ -1735,6 +1739,8 @@ def drawModifiable(surface, camera):
                                     pg.draw.rect(surface, (255, 0, 0), (pos[0], pos[1] - 5, bar_width, 5))
                                     if bob.isHunting:
                                         surface.blit(purpleLeft, pos)
+                                    elif bob.isMine:
+                                        surface.blit(blueLeft, pos)
                                     else: surface.blit(greenLeft, pos)
                                 else: pass
                             else: pass
@@ -1748,6 +1754,8 @@ def drawModifiable(surface, camera):
                         pg.draw.rect(surface, (255, 0, 0), (finish[0], finish[1] - 5, bar_width, 5))
                         if bob.isHunting:
                             surface.blit(purpleLeft, finish)
+                        elif bob.isMine:
+                            surface.blit(blueLeft, finish)
                         else: surface.blit(greenLeft, finish)
                     else: pass
     for bob in gameController.diedQueue:

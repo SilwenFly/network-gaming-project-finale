@@ -91,7 +91,7 @@ class World:
 
         
         
-        for bob in self.gameController.listBobs:
+        for bob in (self.gameController.listBobs + self.gameController.listOtherBobs): #Add
             if (bob not in self.gameController.diedQueue) and (bob not in self.gameController.newBornQueue):
                 # if(self.gameController.getTick() % 2 == 0 ):
                     nbInteval = len(bob.getPreviousTiles()) - 1
@@ -106,6 +106,8 @@ class World:
                                 pg.draw.rect(surface, (255, 0, 0), (finish[0], finish[1] - 5, bar_width, 5))
                                 if bob.isHunting:
                                     surface.blit(purpleLeft, finish)
+                                elif bob.isMine:
+                                    surface.blit(blueLeft, finish)
                                 else: surface.blit(greenLeft, finish)
                             else: pass
                         else:
@@ -122,6 +124,8 @@ class World:
                                         pg.draw.rect(surface, (255, 0, 0), (pos[0], pos[1] - 5, bar_width, 5))
                                         if bob.isHunting:
                                             surface.blit(purpleLeft, pos)
+                                        elif bob.isMine:
+                                            surface.blit(blueLeft, pos)
                                         else: surface.blit(greenLeft, pos)
                                     else: pass
                                 else: pass
@@ -135,6 +139,8 @@ class World:
                             pg.draw.rect(surface, (255, 0, 0), (finish[0], finish[1] - 5, bar_width, 5))
                             if bob.isHunting:
                                 surface.blit(purpleLeft, finish)
+                            elif bob.isMine:
+                                surface.blit(blueLeft, finish)
                             else: surface.blit(greenLeft, finish)
                         else: pass
 
@@ -240,7 +246,7 @@ class World:
         greenLeft = pg.transform.scale(greenLeft, (int(greenLeft.get_width() * self.zoom), int(greenLeft.get_height() * self.zoom)))
         blueLeft = pg.transform.scale(blueLeft, (int(blueLeft.get_width() * self.zoom), int(blueLeft.get_height() * self.zoom)))
         purpleLeft = pg.transform.scale(purpleLeft, (int(purpleLeft.get_width() * self.zoom), int(purpleLeft.get_height() * self.zoom)))
-        for bob in self.gameController.listBobs:
+        for bob in (self.gameController.listBobs + self.gameController.listOtherBobs): #Add 
             (destX, destY) = bob.getCurrentTile().getRenderCoord()
             (desX, desY) = (destX + self.surface.get_width()/2 , destY - ( + 50 - self.setting.getTileSize() ) )
             finish = (desX, desY + self.setting.getTileSize())
@@ -249,6 +255,8 @@ class World:
             # pg.draw.rect(surface, (255, 0, 0), (finish[0], finish[1] - 5, bar_width, 5))
             if bob.isHunting:
                 surface.blit(purpleLeft, (a*self.zoom, b*self.zoom))
+            elif bob.isMine: 
+                surface.blit(blueLeft, (a*self.zoom, b*self.zoom))
             else: surface.blit(greenLeft, (a*self.zoom, b*self.zoom))
 
 

@@ -7,6 +7,7 @@ from pygame.locals import *
 from GameControl.setting import Setting
 # from GameControl.gameControl import GameControl
 import sys
+from socket import gethostname, gethostbyname #Add
 
 flags = HWSURFACE | DOUBLEBUF
 

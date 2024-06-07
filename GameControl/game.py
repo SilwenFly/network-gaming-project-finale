@@ -44,6 +44,9 @@ class Game:
         self.world = World(self.width, self.height)
         self.camera = Camera(self.width, self.height) 
         self.gameController.initiateBobs(self.setting.getNbBob())
+        #self.gameController.initiateOtherBobs(self.setting.getNbBob()) ####parametre a changer il devrait y avoir la liste des bobs des autres
+        #################### je sais pas si on doit initialiser le jeu avec ça deja
+
         # self.gameController.eatingTest()
         self.gameController.respawnFood()
 
@@ -106,6 +109,9 @@ class Game:
                 self.network.receive()
                 ######################
 
+
+                #################################################################
+                #C'EST ICI QU'ON VA ENVOYER ET RECEVOIR LES DATAS AVEC LES AUTRES
                 self.gameController.increaseTick()
                 self.drawSimu() 
             else:
