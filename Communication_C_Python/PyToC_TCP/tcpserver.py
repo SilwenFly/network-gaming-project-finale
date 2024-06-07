@@ -51,14 +51,14 @@ class Communication:
         print("\n")
         print(BOLD, RED, "Serveur Allumé, sur le port", PORT, NOCOLOR)
         #lancer le processus C sur le port xxxx.
-        # subprocess.run(["wsl", "./network/tcpclient", "9000"], shell=True)
+        os.system(r'./tcpclient 9000 &')
         #accepter la connection du processus C
         self.connection, retaddr = self.mysocket.accept()
         self.connection.setblocking(False)
         print(BOLD, RED,"Connecté au programme C local", NOCOLOR)
         print("\n")
 
-    def recieve(self):    
+    def receive(self):    
         try :
             msgIn = self.connection.recv(BUFSIZE)
             print(GREEN, "->> Recv : ", msgIn.decode(), NOCOLOR)
@@ -74,7 +74,7 @@ class Communication:
                 time.sleep(0.1)
                 return
             else : #Other error -> problem ! (I've never had any issue, yet)
-                print(BOLD, RED, "\n ERROR in the recieve fct", NOCOLOR)
+                print(BOLD, RED, "\n ERROR in the receive fct", NOCOLOR)
                 self.exit()
                 
     def send(self, msgOut):
@@ -105,6 +105,6 @@ while time.time()-startTime < 60 : #run for x seconds
     if time.time()-lastSendTime > 0.5 : #send Bip every 0.5 seconds
         ConnectionToC.send("Bip")
         lastSendTime=time.time()
-    else : ConnectionToC.recieve() #Listen
+    else : ConnectionToC.receive() #Listen
 
 ConnectionToC.exit()

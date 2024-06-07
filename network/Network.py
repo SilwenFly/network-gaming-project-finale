@@ -1,4 +1,4 @@
-import Packet
+from network.Packet import *
 
 import pickle
 
@@ -9,7 +9,7 @@ import os
 import errno
 import subprocess
 
-from Tiles.Bob import Bob
+from Tiles.Bob import bob
 from Tiles.tiles import Tile
 
 class Network:
@@ -40,8 +40,11 @@ class Network:
         print(self.BOLD, self.RED, "PROJET PROGRAMMATION RESEAU - STI - INSA CVL 2023/2024", self.NOCOLOR)
         print("\n")
         print(self.BOLD, self.RED, "Serveur Allumé, sur le port", PORT, self.NOCOLOR)
+        print(os.getcwd())
         #lancer le processus C sur le port xxxx.
-        os.system(r'./tcpclient 9000 &')
+        
+        subprocess.run(["wsl", "./network/tcpclient", "9000"], shell=True)
+        #os.system(r'./tcpclient 9000 &')
         #accepter la connection du processus C
         self.connection, retaddr = self.mysocket.accept()
         self.connection.setblocking(False)

@@ -9,7 +9,7 @@ from socket import gethostname, gethostbyname
 
 class Bob: 
     id = 0
-    def __init__(self,idOwner):
+    def __init__(self):
         self.setting = Setting.getSettings()
 
         #Propriété réseau
@@ -19,7 +19,6 @@ class Bob:
 
         self.id = Bob.id
         Bob.id += 1
-        self.idOwner #id proprietaire pour savoir à qui le bob
         self.age = 0
         self.isHunting = False
         self.alreadyInteracted = False

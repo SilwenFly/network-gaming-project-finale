@@ -49,7 +49,8 @@ class Game:
 
         #Partie ajoutée pour le réseau
         self.network = Network()
-    
+        print("ADD Network ID: ", self.network.id)
+        #####################
     def loadGame(self, saveNumber):
         loadSetting(saveNumber)
         # self.setting = Setting.getSettings()

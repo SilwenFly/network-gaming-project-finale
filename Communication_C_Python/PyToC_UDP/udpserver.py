@@ -5,7 +5,7 @@ PROJET PROGRAMMATION RESEAU - STI - INSA CVL 2023/2024
 Titouan GODARD 
 
 Communication entre C et Python en local.
-	-> PROTOCOLE TCP.
+	-> PROTOCOLE UDP.
 
 DANS LE PROGRAMME C : La partie Py To C tourne dans le programme principal, et C To Py tourne dans un thread dédié.
 DANS LE PROGRAMME Py : Execution linéaire.
@@ -13,8 +13,8 @@ Le python peut terminer le programme C en lui envoyant "exit".
 
 Utilisation : 
     - pour changer le port :    modifier dans Py la variable globale et le paramètre de la commande os.system() L53.
-	- compiler tcpclient.c :	gcc tcpclient.c -o tcpclient 
-	- executer le python :		/bin/python3 ./tcpserver.py
+	- compiler udpclient.c :	gcc udpclient.c -o udpclient 
+	- executer le python :		/bin/python3 ./udpserver.py
 
 """
 
@@ -43,24 +43,24 @@ BUFSIZE = 1024
 class Communication:
     def __init__(self):
         #créer la socket qui écoute le programme C local.
-        self.mysocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
+        self.mysocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) 
         self.mysocket.bind((LOCAL, PORT))
-        self.mysocket.listen(1)
         print("\n")
         print(BOLD, RED, "PROJET PROGRAMMATION RESEAU - STI - INSA CVL 2023/2024", NOCOLOR)
         print("\n")
-        print(BOLD, RED, "Serveur Allumé, sur le port", PORT, NOCOLOR)
+        print(BOLD, RED, "Serveur UDP Allumé, sur le port", PORT, NOCOLOR)
         #lancer le processus C sur le port xxxx.
-        # subprocess.run(["wsl", "./network/tcpclient", "9000"], shell=True)
+        os.system(r'./udpclient 9000 &')
         #accepter la connection du processus C
-        self.connection, retaddr = self.mysocket.accept()
-        self.connection.setblocking(False)
+        bytesAddressPair = self.mysocket.recvfrom(BUFSIZE)   # recvfrom renvoie un tuple (message, addr)
+        self.connection = bytesAddressPair[1] #connection to the C socket
         print(BOLD, RED,"Connecté au programme C local", NOCOLOR)
         print("\n")
+        
 
     def recieve(self):    
-        try :
-            msgIn = self.connection.recv(BUFSIZE)
+        msgIn = self.mysocket.recvfrom(BUFSIZE)[0]
+        if len(msgIn)>0:
             print(GREEN, "->> Recv : ", msgIn.decode(), NOCOLOR)
             if msgIn.decode() == 'exit':
                 print(BOLD, RED, "### Exit ###", NOCOLOR)
@@ -68,17 +68,9 @@ class Communication:
             ########################################
             # mettre a jour les données du jeu ici #
             ########################################
-        except socket.error as e:
-            if e.errno == errno.EWOULDBLOCK : #in this case, this is a timeout error because we didn't received any message, so everything is fine !
-                #print("No Data Received")
-                time.sleep(0.1)
-                return
-            else : #Other error -> problem ! (I've never had any issue, yet)
-                print(BOLD, RED, "\n ERROR in the recieve fct", NOCOLOR)
-                self.exit()
                 
     def send(self, msgOut):
-        self.connection.send(msgOut.encode())
+        self.mysocket.sendto(msgOut.encode(), self.connection)
         print (PURPLE, "Send : ", msgOut, NOCOLOR)
         
     def exit(self):
@@ -89,8 +81,7 @@ class Communication:
         print("\n")
         ConnectionToC.send("exit") #terminer le programme C
         time.sleep(0.1)
-        #Close the sockets
-        self.connection.close()
+        #Close the socket
         self.mysocket.close()
         print("\n")
         print(RED, BOLD, "Fermeture des sockets OK \n", NOCOLOR)
