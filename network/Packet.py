@@ -33,3 +33,4 @@ class Packet:
         self.type = data[0]
         self.content = data[2][:-1]
         return (self.type,self.content)
+
