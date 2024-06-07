@@ -163,7 +163,7 @@ class GameControl:
     def initiateOtherBobs(self, listOtherBobs): #in the future, will be used for initiating the bobs of other players
         from Tiles.Bob.bob import Bob
         for otherBob in listOtherBobs:
-            print("Adding other bob")
+            #print("Adding other bob")
             x = otherBob.CurrentTile.gridX
             y = otherBob.CurrentTile.gridY
             tile = self.getMap()[x][y]
